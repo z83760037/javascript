@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+<form action="cookie.php">
+    <input type="text" name="username" >
+    <input type="submit" value="登录">
+</form>
+<script>
+
+        window.onload=function(){
+
+                var cookiename=document.cookie;
+                if(cookiename){
+                    document.querySelector("input[type=text]").value=cookiename.split("=")[1];
+                }
+
+
+
+        }
+
+
+</script>
+</body>
+</html>

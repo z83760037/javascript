@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div></div>
+<input type="text" id="username"><!-- <input type="button" value="检测用户名是否存在">-->
+<script>
+
+         document.querySelector("input[type=text]").onblur=function(){
+                var username=document.getElementById("username").value;
+                var xhr=new XMLHttpRequest();
+                xhr.open("get","./api/checkUser.php?username="+username);
+                xhr.send(null);
+                xhr.onreadystatechange=function(){
+                      if(xhr.readyState==4 && xhr.status==200){
+                            var data=xhr.responseText;
+                            document.querySelector("div").innerHTML=data;
+                      }
+                }
+         };
+
+</script>
+</body>
+</html>
