@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../js/allajax.js"></script>
+</head>
+<body>
+    <script>
+
+            $.ajax({
+                 url:"ajax.php",
+                 type:"Post",
+                //支持的第一种方式，字符串
+//                data:"username=zhagsan&age=11",
+                 /*
+                 * 我们希望data 的值支持 {} 对象结构
+                 * */
+                 data:{
+                       username:'陈江',
+                       sex:"女"
+                 },
+                 success:function(data){
+                     console.log(data);
+                 }
+            });
+    </script>
+</body>
+</html>

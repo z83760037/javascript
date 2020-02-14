@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+        <input type="button" value="发送跨域请求">
+
+        <script>
+                document.querySelector("input").onclick=function(){
+                      var  xhr=new XMLHttpRequest();
+                      xhr.open("post","http://www.tianmao.com/mao.php");
+                      xhr.send(null);
+                      xhr.onreadystatechange=function(){
+                           if(xhr.readyState==4 && xhr.status==200){
+                                var data=xhr.responseText;
+                                //接收到数据.
+                                console.log(data);
+                           }
+                      }
+                }
+        </script>
+</body>
+</html>

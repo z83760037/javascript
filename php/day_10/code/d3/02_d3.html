@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--根据数据生成图标.-->
+    <script src="./js/d3.js"></script>
+</head>
+<body>
+     <!--根据数据生成图标-->
+     <script>
+           var data=[11,22,33,44,55,66];
+           //通过js 往页面上面创建svg 元素.
+           d3.select("body").append("svg").attr("width",300)
+                   .attr("height",300).style("background","red")
+                   .selectAll("svg")
+                   .data(data)
+                   .enter()
+                   .append("rect");
+
+
+
+
+     </script>
+</body>
+</html>

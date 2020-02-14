@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../assets/jQueryfileupload/jquery.min.js"></script>
+    <script src="../assets/template-web/template-web.js"></script>
+    <!--基于jquery 的插件，这个方法可以直接对这个里面的布局进行定位.-->
+    <script src="js/jquerywaterfall.js"></script>
+    <script type="text/template" id="templateId">
+        {{each rows as item}}
+        <div class="item">
+            <img src="{{item.lifePhoto}}"  alt="./">
+            <p>
+                {{item.username}}
+            </p>
+        </div>
+        {{/each}}
+    </script>
+
+    <style>
+        .container{
+            width: 1200px;
+            margin: 0 auto;
+            padding-top: 40px;
+        }
+        .items{
+            position: relative;
+        }
+        .item{
+            width: 232px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            box-shadow: 0px 0px 30px rgba(0,0,0,0.3);
+        }
+        .item img{
+            display: block;
+            width: 100%;
+            /*
+            实际的开发过程当中，每张图片的高度不一样.
+            */
+            height: 300px;
+        }
+        /*
+          添加这个目的，就是让每一行的有一张图片高度不一样
+          实际开发过程当中，图片的高度，是后台返回的
+        */
+        .item:nth-child(4n) img{
+            height: 400px;
+        }
+        /*按钮的样式.*/
+        .container > .btn {
+            width: 280px;
+            height: 40px;
+            margin: 30px auto;
+            text-align: center;
+            line-height: 40px;
+            background-color: #CCC;
+            border-radius: 6px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .container > .loading {
+            background-color: transparent;
+        }
+    </style>
+</head>
+<body>
+<!--页面布局-->
+<div class="container">
+    <div class="items">
+
+    </div>
+    <div class="btn ">点击加载</div>
+</div>
+
+<script>
+    (function(huike){
+        var kaikeba={
+            config:{
+                params:{
+                    page:1,
+                    pageSize:6
+                }
+            },
+            init:function(){
+                //初始化事件.
+                this.initEvent();
+                //渲染第一页的数据.
+                this.render();
+            },
+            initEvent:function(){
+
+                var _this=this;
+                $(".btn").on("click",function(){
+                    //点击的时候添加防止重复提交.
+                    if($(this).hasClass("loading")){
+                         return;
+                    }
+                    $(this).addClass("loading").text("正在加载中,请稍后!!");
+                    _this.config.params.page++;
+                    console.log(_this.config.params.page);
+                    //我需要去调用
+                    _this.render();
+                });
+
+                //滚动加载
+               huike(window).on("scroll",function(){
+                    //什么时候我要去开始加载数据.
+                    //我要获取到内容的高度
+                    //我要获取到当前窗口的高度
+                    //我要获取到页面卷曲进去的高度.
+                    var contentHeight=huike(".container").height();
+                    //窗口的高度.
+                    var winHeight=huike(window).height();
+                    //获取卷曲进去的高度
+                    var scrollTop=huike(document).scrollTop();
+                    if(contentHeight-(winHeight+scrollTop)<200) {
+                            //滚动在这个区间的时候，要去加载数据.
+                            //触发当前元素的点击事件.
+                             $(".btn").click();
+                    }
+               })
+
+            },
+            render:function(){
+                var _this=this;
+                huike.ajax({
+                    url:"../api/queryTeacher.php",
+                    type:"get",
+                    data:_this.config.params,
+                    dataType:"json",
+                    success:function(data){
+                        if(data.rows.length==0){
+                             //说明没有更多的数据.
+                            $(".btn").text("没有更多的数据了.");
+                             return;
+                        }
+
+                        var html=template("templateId",data);
+
+                        //获取到元素网页面上面放，然后定位.
+                        $(".items").append(html).waterFall();
+                        //数据已经渲染完成
+                        $(".btn").removeClass("loading").text("点击加载");
+                    }
+                })
+            }
+        }
+        kaikeba.init();
+    })($)
+</script>
+
+</body>
+</html>

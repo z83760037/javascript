@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--引入这个jQuery 文件.-->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-waterfall.js"></script>
+    <script src="js/template-native.js"></script>
+    <script type="text/template" id="waterId">
+        <%for(var i=0;i<items.length;i++){%>
+        <div class="item">
+            <img src="<%=items[i].path%>" alt="">
+            <p>
+                <%=items[i].text%>
+            </p>
+        </div>
+        <%}%>
+    </script>
+    <script>
+        $(function(){
+            var params={
+                page:1,
+                pageSize:50
+            }
+
+            //页面加载的手，我需要去执行加载.
+            render();
+            //点击的时候我要去获取数据.
+            $(".btn").on("click",function(){
+                //要防止用户重复点击提交.
+                //可以使用类名.
+                var $btn=$(this);
+                if($btn.hasClass("loading")){
+                    return;
+                }
+                $btn.addClass("loading").text("正在加载中..");
+                render();
+            });
+            /*监听滚动条滚动的事件.*/
+            $(window).on("scroll",function(){
+                //滚动的时候进行加载
+                var containerHeight=$(".container").height();
+                //被卷曲的高度.
+                var scrollHeight=$(document).scrollTop();
+                //获取浏览器的高度
+                var winHeight=$(window).height();
+                if(containerHeight-(scrollHeight+winHeight)<200){
+                    //触发按钮的点击事件.
+                    $(".btn").click();
+                }
+            })
+
+        });
+    </script>
+    <style>
+        .container{
+            width: 1200px;
+            margin: 0 auto;
+            padding-top: 40px;
+        }
+        .items{
+            position: relative;
+        }
+        .item{
+            width: 232px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            box-shadow: 0px 0px 30px rgba(0,0,0,0.3);
+        }
+        .item img{
+            display: block;
+            width: 100%;
+            /*
+            实际的开发过程当中，每张图片的高度不一样.
+            */
+            height: 300px;
+        }
+        /*
+          添加这个目的，就是让每一行的有一张图片高度不一样
+          实际开发过程当中，图片的高度，是后台返回的
+        */
+        .item:nth-child(4n) img{
+            height: 400px;
+        }
+        /*按钮的样式.*/
+        .container > .btn {
+            width: 280px;
+            height: 40px;
+            margin: 30px auto;
+            text-align: center;
+            line-height: 40px;
+            background-color: #CCC;
+            border-radius: 6px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .container > .loading {
+            background-color: transparent;
+        }
+
+    </style>
+</head>
+<body>
+
+<!--页面布局-->
+<div class="container">
+    <div class="items">
+
+    </div>
+    <div class="btn ">点击加载</div>
+</div>
+</body>
+</html>

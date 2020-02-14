@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/d3.js"></script>
+</head>
+<body>
+    <!--柱状图-->
+    <script>
+            //准备数据.
+            var data=[11,22,33,44,55,66];
+
+            //创建svg 标签
+            var svg=d3.select("body").append("svg").attr("width",400).attr("height",300);
+
+            //创建x轴
+            //生成x坐标轴的刻度.
+            var xScale=d3.scaleBand().domain(["php","go","python","java","node.js",".net"])
+                    .rangeRound([0,400]);
+            //放在底部.
+            var xAxis=d3.axisBottom(xScale);
+            //创建y轴
+            var yScale=d3.scaleLinear().domain([0,d3.max(data)]).range([300,0]);
+            var yAxis=d3.axisLeft(yScale);
+            svg.append("g")
+                    .attr("transform","translate(20,280)")
+                    .call(xAxis);
+            svg.append("g")
+                    .attr("transform","translate(20,-20)")
+                    .call(yAxis);
+
+            svg.selectAll('rect')
+                    .data(data)
+                    .enter()
+                    .append('rect')
+                    .attr('fill', 'blue')
+                    .attr('width', xScale.step() - 6)
+                    .attr('height', function(h){
+                          return 400-yScale(h);
+                    }).attr('x', function (d, i) {
+                        // console.log(i)
+                        return xScale.step() * i + 8;
+
+                    })
+                    .attr('y', function (d) {
+                        return yScale(d);
+                    })
+
+
+
+
+
+
+    </script>
+</body>
+</html>

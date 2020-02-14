@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--
+        使用jQuery 去请求第三方服务器的数据.
+    -->
+    <script src="../js/jquery.min.js"></script>
+    <!--
+            我们现在去请求第三方的服务器的数据，一般服务器返回的 数据
+            要么是xml 格式的，要么json 的
+            现在的一些项目的架构，
+            前后端分离的，客户端跟服务器进行交互的，数据都是通过ajax 去进行处理.
+            前端就是构建页面，然后还要做数据交互.
+            做数据交互，跟后台进行对接。
+            后台：
+                1:请求的地址
+                2:请求的参数，参数对应的要求的说明
+                3:提交的方式
+                4:响应的数据格式的说明.
+    -->
+</head>
+
+<body>
+    <input type="text" id="cityName"><input type="button" value="查询">
+    <style>
+        table {
+            width: 600px;
+            border-collapse: collapse;
+        }
+
+        td {
+            height: 40px;
+            text-align: center;
+            border: 1px solid #CCC;
+        }
+    </style>
+    <table>
+        <tr>
+            <td>日期</td>
+            <td>星期</td>
+            <td>晚上最低温度</td>
+            <td>白天最高温度</td>
+            <td>风</td>
+        </tr>
+
+    </table>
+    <script>
+        $(function () {
+            $("input[type=button]").on("click", function () {
+                var cityName = $("#cityName").val();
+
+                $.ajax({
+                    url: "http://api.jisuapi.com/weather/query",
+                    type: "get",
+                    data: {
+                        appkey: "7ca5f245254f2b88",
+                        city: cityName
+                    },
+                    dataType: "jsonp",
+                    success: function (data) {
+                        var weathers = data.result.daily;
+                        //console.log(weathers);
+                        //解析json 格式的数据，将json 格式的数组与页面上面的标签进行组装，然后放在页面上面.
+
+                        /*
+                        *  <tr>
+                         <td>日期</td>
+                         <td>星期</td>
+                         <td>晚上最低温度</td>
+                         <td>白天最高温度</td>
+                         <td>风</td>
+                         </tr>
+                        * */
+                        var tr = "";
+                        for (var i = 0; i < weathers.length; i++) {
+                            tr += "<tr>";
+                            tr += "<td>" + weathers[i].date + "</td>";
+                            tr += "<td>" + weathers[i].week + "</td>";
+                            tr += "<td>" + weathers[i].night.templow + "</td>";
+                            tr += "<td>" + weathers[i].day.temphigh + "</td>";
+                            tr += "<td>" + weathers[i].day.winddirect + "</td>";
+                            tr += "</tr>";
+                        }
+                        $("table").append(tr);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

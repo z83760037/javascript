@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>雪花</title>
+    <style>
+          *{
+                margin: 0;
+                padding: 0;
+          }
+    </style>
+</head>
+<body>
+    <script src="./js/three/three.min.js"></script>
+    <!--基于three.js 的一个插件，用来控制 摄像机的.-->
+    <script src="./js/three/OrbitControls.js"></script>
+
+    <script>
+            var width=window.innerWidth;
+            var height=window.innerHeight;
+            //创建舞台.
+            var scene=new THREE.Scene();
+            //创建摄像
+            var camera=new THREE.PerspectiveCamera(45,width/height,0.1,800);
+            camera.position.x=0;
+            camera.position.y=0;
+            camera.position.z=20;
+            camera.lookAt(scene.position);
+            var renderer=new THREE.WebGLRenderer();
+            //设置大小.
+            renderer.setSize(width-100,height-100);
+            //放在页面.
+            document.body.appendChild(renderer.domElement);
+            //控制相机.
+            var orbitControls=new THREE.OrbitControls(camera);
+            //自动旋转.
+            orbitControls.autoRotate = true;
+            //演员登场.
+            var box=new THREE.BoxGeometry(4,4,4);
+            //给几何体绘制颜色.
+            var materials=[
+                new THREE.MeshBasicMaterial({"color":"blue"}),
+                new THREE.MeshBasicMaterial({"color":"red"}),
+                new THREE.MeshBasicMaterial({"color":"pink"}),
+                new THREE.MeshBasicMaterial({"color":"yellow"}),
+                new THREE.MeshBasicMaterial({"color":"green"}),
+                new THREE.MeshBasicMaterial({"color":"yellowgreen"})
+            ];
+            //将颜色添加到几何体.
+            var cube=new THREE.Mesh(box,materials);
+            scene.add(cube);
+            render();
+            function render(){
+                    renderer.render(scene,camera);
+                    cube.rotation.x+=0.01;
+                    cube.rotation.y+=0.02;
+                    cube.rotation.z+=0.03;
+                    window.requestAnimationFrame(render);
+            }
+    </script>
+</body>
+</html>

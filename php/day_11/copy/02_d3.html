@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>d3</title>
+    <script src="js/d3.js"></script>
+</head>
+<body>
+    <script>
+             var height=400;
+             var width=400;
+             var padding={
+                   left:20,
+                   top:20,
+                   bottom:20
+             }
+             var data=[11,23,44,22,55];
+             var svg=d3.select("body").append("svg").attr("width",width).attr("height",height);
+             //设置x轴的刻度.
+             var xScale=d3.scaleBand().domain(["angular","react","vue","bootstrap","mysql"]).rangeRound([0,width-padding.left]);
+             var xAxis=d3.axisBottom(xScale);
+             var yScale=d3.scaleLinear().domain([0,d3.max(data)]).range([height-padding.top-padding.bottom,0]);
+             var yAxis=d3.axisLeft(yScale);
+             //x 轴的刻度.
+             svg.append("g")
+                     .attr("transform","translate("+padding.left+","+(height-padding.bottom)+")")
+                     .call(xAxis);
+             svg.append("g")
+                     .attr("transform","translate("+padding.left+","+padding.top+")")
+                     .call(yAxis);
+             //填充数据.
+             svg.selectAll("rect")
+                     .data(data)
+                     .enter()
+                     .append("rect")
+                     .attr("transform","translate("+padding.left+","+padding.top+")")
+                     .attr("fill","pink")
+                     .attr("width",xScale.step()-8)
+                     .attr("height",function(h){
+                           return height-padding.top-padding.bottom-yScale(h);
+                     })
+                     .attr("x",function(h,i){
+                           return i*xScale.step()+5;
+                     })
+                     //设置y 的坐标值.
+                     .attr("y",function(h){
+                         return yScale(h);
+                     })
+    </script>
+</body>
+</html>

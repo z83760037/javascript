@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>柱状图</title>
+    <script src="js/d3/d3.js"></script>
+</head>
+<body>
+
+    <!-- 开始制作图标-->
+    <script>
+         //准备一份数据
+        var data=[11,22,33,66,44,27];
+
+        var width=400;
+        var height=400;
+
+        var padding={
+              left:20,
+              bottom:20,
+              top:20
+        }
+
+         //创建svg 元素
+        var svg=d3.select("body").append("svg").attr("width",width).attr("height",height);
+
+        //创建x 轴，x 轴刻度.
+        //创建x 轴刻度
+        var xScale=d3.scaleBand().domain([".net","php","python","go","node.js","java"])
+                .rangeRound([0,width-padding.left]);
+        //把x 轴添加到底部
+        var xAxis=d3.axisBottom(xScale);
+
+        //我要创建一个y 轴刻度
+        var yScale=d3.scaleLinear().domain([0,d3.max(data)]).range([height-padding.top-padding.bottom,0]);
+        //将y 轴的刻度添加到左边.
+        var yAxis=d3.axisLeft(yScale);
+        //我把这个x 轴添加到svg 里面去.
+        svg.append("g")
+                .attr("transform","translate("+padding.left+","+(height-padding.top)+")")
+                .call(xAxis);
+        svg.append("g")
+                .attr("transform","translate("+padding.left+","+padding.bottom+")")
+                .call(yAxis);
+        //根据数据去进行填充.
+         svg.selectAll("rect")
+                 .data(data)
+                 .enter()
+                 .append("rect")
+                 .attr("transform","translate("+padding.left+","+padding.top+")")
+                 .attr("fill","pink")
+                 .attr("width",xScale.step()-8)
+                 .attr("height",function(h){
+                        return height-padding.top-padding.bottom-yScale(h)
+                 })
+                 //设置每个 rect x 值，以及y 值.
+                 .attr("x",function(h,index){
+                        return index*xScale.step()+8;
+                 }).attr("y",function(h){
+                     return  yScale(h);
+                 });
+    </script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/d3.js"></script>
+</head>
+<body>
+<br>
+    <script>
+           var width=400;
+           var height=400;
+           var data=[11,22,33,44,55];
+           //创建柱状图.
+           //1:创建一个svg 标签.
+           var svg=d3.select("body").append("svg").attr("width",width).attr("height",height);
+           //2:创建x 轴的刻度
+           var xScale=d3.scaleBand().domain(["angular","vue","react","node.js","bootstrap"])
+                    //长度范围.
+                   .rangeRound([0,width-40]);
+            //将刻度添加到底部.
+           var xAxis=d3.axisBottom(xScale);
+
+           /*
+           * scaleLinear 生成y 轴的刻度
+           * domain 根据数组的值生成刻度
+           * 生成的刻度的长度.
+           * */
+           var yScale=d3.scaleLinear().domain([0,d3.max(data)]).range([height-40,0]);
+           var yAxis=d3.axisLeft(yScale);
+           svg.append("g")
+                   .attr("transform","translate(20,"+(height-20)+")")
+                   .call(xAxis);
+           svg.append("g")
+                   .attr("transform","translate(20,20)")
+                   .call(yAxis);
+           //填充数据.
+           svg.selectAll("rect")
+                   .data(data)
+                   //根据data 创建rect
+                   .enter()
+                   //添加到svg 标签里面.
+                   .append("rect")
+                   //需要改位置.
+                   .attr("transform","translate("+20+","+20+")")
+                   .attr("fill","blue")
+                   .attr("width",xScale.step()-10)
+                   .attr("height",function(h){
+                         //h 的值是
+                          return height-40-yScale(h);
+                   })
+                   .attr("x",function(d,i){
+                       return xScale.step()*i+8;
+                   })
+                   .attr("y",function(d){
+                         return yScale(d);
+                   });
+
+    </script>
+</body>
+</html>

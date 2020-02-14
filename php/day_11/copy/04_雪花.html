@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>three.js 制作雪花效果.</title>
+    <style>
+          body{
+               margin: 0;
+               padding: 0;
+          }
+    </style>
+</head>
+<body>
+    <script src="./js/three/three.min.js"></script>
+    <script src="./js/three/OrbitControls.js"></script>
+    <script>
+               var width=window.innerWidth;
+               var height=window.innerHeight;
+               //创建舞台
+               var scene = new THREE.Scene();
+               //创建摄像机.
+               var camera = new THREE.PerspectiveCamera(50,width/height,0.1,800);
+               //调整相机位置
+               camera.position.x=0;
+               camera.position.y=0;
+               camera.position.z=100;
+               //摄像机的位置对准舞台.
+               camera.lookAt(scene.position);
+               //开始录制，往页面上面添加渲染
+               var renderer=new THREE.WebGLRenderer();
+               renderer.setSize(width,height);
+               document.body.appendChild(renderer.domElement);
+               // 摄像机插件 控制摄像机的缩放。
+               var orbitControls = new THREE.OrbitControls(camera);
+               orbitControls.autoRotate = true;
+               //演员登场.  创建一个几何体.
+               var geometry=new THREE.Geometry()
+               //加载纹理
+               var texture=new THREE.TextureLoader().load("./images/snow.jpg");
+               //材质，用来控制图片的.
+               var material=new THREE.PointsMaterial({
+                    size:20,
+                    map:texture,
+                    //用来调整雪花的透明度.
+                    transparent: true,
+                    depthWrite: false,
+                    blending: THREE.AdditiveBlending
+               });
+               //创建更多的几何体（来承载许多雪花） 创建雪花， 雪花出现的位置
+               var range = 500;
+               for (var i = 0; i < 400; i++) {
+                   var particle = new THREE.Vector3(
+                           Math.random() * range - range / 2,
+                           Math.random() * range * 1.5,
+                           Math.random() * range - range / 2);
+                       particle.velocityY = 0.1 + Math.random() / 5;
+                       particle.velocityX = (Math.random() - 0.5) / 3;
+                       particle.velocityZ = (Math.random() - 0.5) / 3;
+                       geometry.vertices.push(particle);
+               }
+               //将几何体跟装饰合并.
+               var points = new THREE.Points(geometry, material);
+               //把装饰添加到舞台上
+               scene.add(points);
+               render();
+               function render(){
+                   renderer.render(scene,camera);
+                   //每朵雪花移动的轨迹。
+                   scene.children.forEach(function (child) {
+                       if(child instanceof THREE.Points) {
+                           var vertices = child.geometry.vertices;
+                           child.geometry.verticesNeedUpdate = true;
+
+                           vertices.forEach(function (v) {
+                               v.y = v.y - (v.velocityY);
+                               v.x = v.x - (v.velocityX);
+                               v.z = v.z - (v.velocityZ);
+
+                               // y 的边界值
+                               if(v.y <= -height / 2) {
+                                   v.y = height / 2;
+                               }
+
+                               // x 的边界值
+                               if(v.x <= -width / 2 || v.x >= width / 2) {
+                                   v.velocityX = v.velocityX * -1;
+                               }
+
+                               // z 的边界值
+                               if(v.z <= -60 || v.z >= 60) {
+                                   v.velocityZ = v.velocityZ * -1;
+                               }
+                           })
+                       }
+                   })
+                   requestAnimationFrame(render);
+               }
+    </script>
+</body>
+</html>

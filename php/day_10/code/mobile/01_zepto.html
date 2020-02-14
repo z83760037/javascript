@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--要用那些，就引入那些.-->
+    <script src="../assets/zepto/src/zepto.js"></script>
+    <script src="../assets/zepto/src/event.js"></script>
+    <script src="../assets/zepto/src/fx.js"></script>
+    <script src="../assets/zepto/src/fx_methods.js"></script>
+
+    <!--
+    我们就需要使用到zepto.js 定制
+    定制就是根据我们的需求，把zepto.js 的代码进行合并，合并成一个文件.
+    -->
+
+    <script>
+            $(function(){
+                  $("div").animate({"marginLeft":200},1000);
+            })
+    </script>
+</head>
+<body>
+     <div style="width: 200px;height: 200px;background: yellowgreen;"></div>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>讲师管理系统</title>
+    <link href="../assets/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/bootstraptable/bootstrap-table.css">
+    <style>
+            .layout{
+                   width: 80%;
+                   margin: 100px auto;
+            }
+    </style>
+</head>
+<body>
+<!--基本环境已经搭建好.-->
+<!--添加讲师-->
+<div class="layout">
+    <a  class="glyphicon glyphicon-plus btn btn-success" data-toggle="modal" data-target="#teawindowId">添加讲师</a>
+    <!--模态框内容-->
+    <div class="modal fade" id="teawindowId" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">添加讲师</h4>
+                </div>
+                <div class="modal-body">
+                    <!--窗口里面的表单-->
+                    <form id="teacherForm">
+                        <div class="form-group">
+                            <label for="username">讲师姓名</label>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="讲师姓名">
+                        </div>
+                        <div class="form-group">
+                            <label>年龄</label>
+                            <input type="text" class="form-control" id="age" name="age" placeholder="年龄">
+                        </div>
+                        <div class="form-group">
+                            <label>所属学科</label>
+                            <input type="text" class="form-control" id="lesson" name="lesson" placeholder="所属学科">
+                        </div>
+                        <div class="form-group">
+                            <label>描述</label>
+                            <input type="text" class="form-control" id="desc" name="desc" placeholder="描述">
+                        </div>
+                        <div class="form-group">
+                            <label>照片</label>
+                            <!--jquery  fileupload.js 文件会去读取.-->
+                            <input type="file" id="lifePhotoId" name="lifePhoto" data-url="../api/teacherupload.php">
+                        </div>
+
+                        <div class="form-group image_area_file">
+                                <div style="border: 3px solid #ccc; width:100px;">
+
+                                </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary btn-addTeacher">确定</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <!--使用table 去做数据展示.-->
+    <div class="tableId"  style="margin-top: 10px;">
+            <table id="teacherTableId"></table>
+    </div>
+    <!--自己写table 写分页，特别麻烦，jquery,extjs,jquery easyui,bootstrap bootstraptable.js -->
+</div>
+<script src="../assets/jQueryfileupload/jquery.min.js"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="../assets/bootstrap/js/bootstrap.js"></script>
+<!--引入bootstrap-table.js-->
+<script src="../assets/bootstraptable/bootstrap-table.js"></script>
+<!--table 插件的国际化文件.-->
+<script src="../assets/bootstraptable/bootstrap-table-zh-CN.js"></script>
+<!--文件上传-->
+<script src="../assets/jQueryfileupload/jquery.ui.widget.js"></script>
+<script src="../assets/jQueryfileupload/jquery.iframe-transport.js"></script>
+<script src="../assets/jQueryfileupload/jquery.fileupload.js"></script>
+<script src="./js/teacher.js"></script>
+</body>
+</html>

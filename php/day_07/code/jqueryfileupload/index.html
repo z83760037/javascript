@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jquery fileupload</title>
+    <script src="../jquery/jquery.min.js"></script>
+    <script src="../jquery/jquery.ui.widget.js"></script>
+    <script src="../jquery/jquery.iframe-transport.js"></script>
+    <script src="../jquery/jquery.fileupload.js"></script>
+</head>
+<body>
+<input type="file" name="lifephoto" id="fileupload" data-url="fileupload.php">
+<div class="imageArea">
+
+</div>
+    <!--
+    我要在这里去使用jquery fileupload
+    http://www.jq22.com/
+    -->
+<script>
+        $(function(){
+            //方法进行初始化.
+            $('#fileupload').fileupload({
+                dataType: 'json',
+                //上传成功之后就会调用这里.
+                done: function (e, data) {
+                    //console.log(data.result.url);
+                    $(".imageArea").html("<img src='"+data.result.url+"'>");
+                }
+            });
+        });
+</script>
+
+</body>
+</html>

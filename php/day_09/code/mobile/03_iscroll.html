@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #wrapper{
+            width: 300px;
+            height: 400px;
+            border: 1px solid #ccc;
+            overflow: hidden;
+            position: relative;
+        }
+    </style>
+    <script src="../assets/iscroll/iscroll-probe.js"></script>
+</head>
+<body>
+<div id="wrapper">
+    <ul>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+    </ul>
+</div>
+
+<script>
+        var scroll=new IScroll("#wrapper",{
+            mouseWheel: true, //监听鼠标的滚轮进行滚动
+            scrollbars:true,    //让当前的元素出现滚动条
+        });
+
+
+</script>
+
+</body>
+</html>

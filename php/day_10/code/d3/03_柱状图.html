@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>柱状图.</title>
+    <script src="./js/d3.js"></script>
+</head>
+<body>
+
+    <script>
+          //根据数据生成图标，
+          var data=[11,22,33,44,55,66];
+          //定义宽高
+          var height=300;
+          var width=500;
+          //创建svg 标签
+          var svg=d3.select("body").append("svg").attr("width",width).attr("height",height);
+          //创建坐标轴
+
+          //生成刻度 x轴
+          //scaleBand 生成刻度
+          var xScale=d3.scaleBand()
+                  //根据谁去生成相应刻度
+                  .domain(["php","go","java","python","node.js",".net"])
+                  //刻度放的位置 Round 取整
+                  //按照0-width 的长度分为6等份.
+                  .rangeRound([0,width]);
+          //显示坐标轴
+          var xAxis=d3.axisBottom(xScale);
+          //生成y轴的刻度.  数据是什么，y 轴的刻度就是什么.
+          var yScale=d3.scaleLinear()
+                  // 根据谁生成刻度
+                  .domain([0, d3.max(data)])
+                  .range([height,0]);
+          //坐标轴的位置.
+          var yAxis=d3.axisLeft(yScale);
+          //创建一组标签，分组
+          svg.append("g")
+                  .attr("transform","translate(20,280)")
+                  .call(xAxis);
+          svg.append("g")
+                  .attr("transform","translate(20,-20)")
+                  .call(yAxis);
+    </script>
+</body>
+</html>

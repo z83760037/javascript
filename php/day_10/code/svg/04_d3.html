@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/d3.js"></script>
+
+</head>
+<body>
+<script>
+    //1:准备数据
+    var data=[11,22,33,44,55,66];
+    //2:创建svg 标签
+    var height=300;
+    var width=500;
+    var svg=d3.select("body").append("svg").attr("width",width).attr("height",height);
+    // 3:创建坐标轴
+    //3.1 生成x坐标轴的刻度
+    //api scaleBand
+    //生成刻度,domain 根据谁去生成刻度,rangeRound刻度分成多少等份
+    var xScale=d3.scaleBand()
+            //根据谁去生成相应刻度
+            .domain(["php","go","java","python","node.js",".net"])
+            //刻度放的位置 Round 取整
+            //按照0-width 的长度分为6等份.
+            .rangeRound([0,width]);
+    //x轴的坐标轴添加在最底部
+    var xAxis=d3.axisBottom(xScale);
+    //3.2 生成y坐标轴的刻度
+    var yScale=d3.scaleLinear()
+            // 根据谁生成刻度
+            .domain([0, d3.max(data)])
+            .range([0,height]);
+    //坐标轴的位置.
+    var yAxis=d3.axisLeft(yScale);
+    //3.3 添加到svg 里面显示
+    //创建一组标签，分组
+    svg.append("g")
+            .attr("transform","translate(20,280)")
+            .call(xAxis);
+    svg.append("g")
+            .attr("transform","translate(20,-20)")
+            .call(yAxis);
+</script>
+</body>
+</html>

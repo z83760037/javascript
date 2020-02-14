@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/template-native.js"></script>
+    <style>
+        table {
+            width: 600px;
+            border-collapse: collapse;
+        }
+        td {
+            height: 40px;
+            text-align: center;
+            border: 1px solid #CCC;
+        }
+    </style>
+    <!--
+            模板是用在那里
+            我们在做应用层面的项目开发，一般都是客户端给服务器发个请求，服务器给客户端响应数据。
+        客户端得到数据，解析数据，将数据跟html 标签进行组装，然后放在页面上面.
+          我们在解析数据，以及组装数据的时候非常麻烦
+            模板:是帮助我们解析json 格式的数据，然后将数据跟html 标签进行组装
+    -->
+    <!--
+    我要使用这个模板，一般什么时候会用
+    数据非常复杂的情况下，会使用模板进行解析.
+    -->
+</head>
+
+<body>
+<input type="text" id="start" placeholder="始发站" value="武汉">
+<input type="text" id="end" placeholder="终点站" value="长沙">
+<input type="button" value="查询">
+<table>
+    <tr>
+        <td>车次</td>
+        <td>类型</td>
+        <td>出发站</td>
+        <td>到达站</td>
+        <td>出发时间</td>
+        <td>到达时间</td>
+        <td>距离</td>
+        <td>预定</td>
+    </tr>
+</table>
+<script type="text/template" id="templateId">
+    <%for(var i=0;i<result.length;i++){%>
+        <tr>
+            <td><%=result[i].trainno%></td>
+            <td><%=result[i].type%></td>
+            <td><%=result[i].station%></td>
+            <td><%=result[i].endstation%></td>
+            <td><%=result[i].departuretime%></td>
+            <td><%=result[i].arrivaltime%></td>
+            <td><%=result[i].priceyz%></td>
+            <td><input type="button" value="预定" data-trainno="<%=result[i].trainno%>"></td>
+        </tr>
+    <%}%>
+</script>
+<script>
+    $(function(){
+
+           $("input[type=button]").on("click",function(){
+                   var start=$("#start").val();
+                   var end=$("#end").val();
+                   $.ajax({
+                        url:"http://api.jisuapi.com/train/station2s",
+                        data:{
+                            appkey:"7ca5f245254f2b88",
+                            start:start,
+                            end:end
+                        },
+                        type:"GET",
+                        dataType:"jsonp",/*开启跨域*/
+                        success:function(data){
+                            console.log(data);
+                             //渲染到页面.
+                            /*
+                            * 使用的腾讯的 artTemplate
+                            * */
+                            var html=template("templateId",data);
+                            console.log(html);
+                            $("table").append(html);
+                        }
+                   })
+
+           });
+
+          /*这个数据是从后台过来的预定按钮要添加点击事件.*/
+          $("table").delegate("input[type=button]","click",function(){
+              console.log(this.dataset.trainno);
+          })
+    });
+    /*
+    * 1:引入模板文件
+    * 2:创建模板 <script type="text/template" id="templateId">
+    * 3:将数据跟模板进行绑定 ，调用template-native.js 下面的一个template方法.
+    *   模板的id ，需要解析的数据.
+    * 4:假设我将数据跟模板进行绑定之后，模板文件template-native.js就会去解析模板里面的内容
+    * 5:要准备模板里面的内容，模板里面的内容跟写到页面里面的标签有关系.
+    * 6:我需要在模板里面去解析数据.我需要在模板里面去解析数据。
+    * 7:在模板里面解析数据，模板提供两种语法
+    *       1：一种是原生的语法
+    *       2：新语法.
+    *       模板里面支持两种类型的标签  <% %> 是用来写逻辑的，里面放的都是js 逻辑代码
+    *       <%="kaikeba"%>
+    * */
+
+    /*
+    * 模板的作用：将数据跟模板进行绑定，然后使用模板去解析数据，将数据跟标签进行组装，组装好之后返回一个新的字符串
+    * 最后我们把这个字符串放在页面上面就可以
+    * 使用模板的步骤
+    *        要解析数据的时候，要将数据跟页面的标签进行拼接的时候
+    *        1:引入模板文件  template-native.js  {{}}
+    *        2:创建模板  <script type="text/template" id="templateId">
+    *        3:将数据跟模板进行绑定  我们使用template 方法 ，这个方法  template-native.js 文件下面的
+   *         4:我要在模板里面去解析数据，然后跟标签的内容进行拼接
+      *      5:准备模板内容，模板内容跟写到页面上面的内容有关系
+    *        6:解析数据  <% 写逻辑 %>  <%= 用来向模板输出js 里面的变量的值%>
+    *        7:调用template 方法会一个字符串，将这个内容写到页面对应的位置即可.
+    * */
+
+
+</script>
+</body>
+</html>

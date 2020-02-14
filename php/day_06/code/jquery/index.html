@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--
+            jquery它是一个js 库，这个js 库主要是在pc 端现在还可以。
+      早起程序员做开发的时候，兼容性处理.
+            jquery封装了js 的那些功能
+            1：封装了jquery 对象
+            2：选择器
+            3：dom 操作
+            4：动画处理
+            5：事件的处理
+            6: ajax 封装
+            7: 假设还满足不了你的功能，使用jQuery 的插件.
+    -->
+    <!--
+        jQuery 的ajax 封装了XMLHttpRequest 对象，然后暴露一些方法给我们
+        6 个
+        get
+        post
+        load
+        getScript
+        getJSON
+        ajax
+    -->
+</head>
+<body>
+<script src="../js/jquery.min.js"></script>
+<input type="button" value="jQuery 的ajax">
+<script>
+        $(function(){
+               $("input[type=button]").on("click",function(){
+                      $.ajax({
+                            url:"index.php",
+                            type:"get",
+                            data:{
+                                  username:"陈江",
+                                  sex:"nv"
+                            },
+                            success:function(data){
+                                console.log("请求成功的时候调用");
+                                console.log(data);
+                            },
+                            beforeSend:function(){
+                                console.log("请求发送之前调用");
+                            },
+                            error:function(){
+                                console.log("请求出错之后调用");
+                            },
+                            complete:function(){
+                                console.log("请求完成了调用");
+                            }
+                      });
+               });
+        });
+</script>
+
+</body>
+</html>

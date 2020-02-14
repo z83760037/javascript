@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>three.js 的使用</title>
+    <script src="js/three/three.min.js"></script>
+    <style>
+          *{
+               margin: 0;
+               padding: 0;
+          }
+    </style>
+</head>
+<body>
+    <script>
+           var width=window.innerWidth;
+           var height=window.innerHeight;
+           //创建舞台.
+           var sence=new THREE.Scene();
+           //创建相机.
+           //第一个能够录制的角度.
+           var carma=new THREE.PerspectiveCamera(50,width/height,0.1,800);
+           //调整相机位置，调整位置需要三个坐标
+           carma.position.x=0;
+           carma.position.y=0;
+           carma.position.z=40;
+           //对准舞台.
+           carma.lookAt(sence.position);
+           //开始录制.
+           var renderer=new THREE.WebGLRenderer();
+           renderer.setSize(width,height);
+           //往页面上面添加一个canvas 标签.
+           document.body.appendChild(renderer.domElement);
+           //创建演员，演员有四个面.
+           var box = new THREE.BoxGeometry(4, 4, 4);
+           var materials=[
+               new THREE.MeshBasicMaterial({color: 'blue'}),
+               new THREE.MeshBasicMaterial({color: 'red'}),
+               new THREE.MeshBasicMaterial({color: 'pink'}),
+               new THREE.MeshBasicMaterial({color: 'green'}),
+               new THREE.MeshBasicMaterial({color: 'yellow'}),
+               new THREE.MeshBasicMaterial({color: 'orange'})
+           ];
+           //将颜色添加到几何体上 给这个几何体使用这些材料.
+           var cube = new THREE.Mesh(box,materials);
+           //舞台上添加演员.
+           sence.add(cube);
+           render();
+           function render(){
+               renderer.render(sence,carma);
+               cube.rotation.x+=0.01;
+               cube.rotation.y+=0.01;
+               cube.rotation.z+=0.01;
+               requestAnimationFrame(render);
+           }
+    </script>
+</body>
+</html>

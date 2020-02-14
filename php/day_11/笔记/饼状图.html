@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>D3.js 饼状图</title>
+</head>
+<body>
+    <script src="d3.js"></script>
+    <script>
+        // 初始化变量
+        var padding = {left: 60, right: 60, top: 60, bottom: 60},
+            colors = ['red', 'blue', 'pink', 'yellow'],
+            width = 400,
+            height = 400,
+            dataset = [30, 24, 18, 60];
+        // 创建 svg
+        var svg = d3.select('body').append('svg')
+        .attr('width', width)
+        .attr('height', height);
+        // var g = svg.append('g');
+        // 颜色值
+        var colorScale = d3.scaleOrdinal()
+            .domain(d3.range(dataset.length))
+            .range(colors);
+        // 创建一个饼图(转换饼图的数据)
+        var pie = d3.pie();
+        var piedata = pie(dataset);
+        // 画弧
+        var arc = d3.arc()
+            .innerRadius(0)
+            .outerRadius(100);
+        var g = svg.selectAll()
+            .data(piedata)
+            .enter()
+            .append('g')
+            // 居中显示
+            .attr('transform', 'translate(' + width / 2 + ', ' + height / 2 + ')');
+        //绘制饼状图的各个扇形
+        g.append("path")
+            .attr('d', function(d) {
+                return arc(d);
+            })
+            .attr('fill', function(d,i) {
+                return colorScale(i);
+            });
+        //绘制饼状图上面的文字信息
+        g.append('text')
+            .attr('transform',function(d) { // 位置设在中心处
+                return 'translate(' + arc.centroid(d)+')';
+            })
+            .attr('text-anchor', 'middle')
+            .text(function(d) {
+                return d.data;
+            })
+    </script>
+</body>
+</html>

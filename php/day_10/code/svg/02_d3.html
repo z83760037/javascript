@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>d3 的基本使用</title>
+    <script src="js/d3.js"></script>
+</head>
+<body>
+    <h3>d3 是一个专门用来操作svg 的js 库.</h3>
+    <!--
+            d3 是用来操作svg 标签的.
+            它的用法类似于jquery，但是它的主要任务不是用来
+            操作dom，而是根据数据去绘制图形.
+    -->
+    <button>按钮</button>
+    <script>
+            /*我要创建一个svg 标签.
+            * 通过js 的方式去追加
+            * d3 给我们提供了一个对象 d3
+            * */
+            d3.select("body").append("svg");
+            //还可以帮助我们去操作dom
+            d3.select("h3").style("color","red");
+            d3.select("body").append("p").text("d3 是一个js 库");
+            d3.select("h3").attr("class","hclass");
+            //去添加点击事件.
+            d3.select("button").on("click",function(){
+                console.log(this);
+            });
+    </script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>移动端讲师的数据展示</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <script src="../assets/zepto/zepto.js"></script>
+    <script src="../assets/template-web/template-web.js"></script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            border: none;
+            list-style: none;
+        }
+        body{
+            font-size: 14px;
+            font-family: "MicroSoft YaHei", sans-serif;
+            overflow: hidden;
+        }
+        .header ,.footer{
+            position: absolute;
+            left: 0;
+            height: 45px;
+            line-height: 45px;
+            text-align: center;
+            width: 100%;
+            background: #ccc;
+            color: #333;
+            z-index: 99;
+        }
+        .header{
+            top: 0;
+        }
+        .footer{
+            bottom: 0;
+        }
+        .wrapper{
+            position: absolute;
+            left: 0;
+            top: 0px;
+            bottom:0px;
+            width: 100%;
+        }
+        .wrapper li{
+            width: 80%;
+            margin: 0 auto;
+            margin-top: 10px;
+            padding: 0 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        .pullDown , .pullUp{
+            text-align: center;
+            height: 30px;
+            line-height: 30px;
+        }
+    </style>
+</head>
+<body>
+<div class="header">顶部的数据 朋友圈</div>
+<div class="wrapper">
+    <div class="scoller">
+        <!--下拉刷新的图标-->
+        <div class="pullDown">
+            <img style="display: none;" width="100" src="../images/loading.gif" alt="" ><span  style="margin-left: 5px;height: 54px;line-height:54px;">下拉刷新</span>
+        </div>
+        <!--内容区域-->
+        <ul class="content">
+                <li>
+                     <p>及时雨宋江</p>
+                     <img src="../images/author.jpg" alt="">
+                </li>
+            <li>
+                <p>及时雨宋江</p>
+                <img src="../images/author.jpg" alt="">
+            </li>
+            <li>
+                <p>及时雨宋江</p>
+                <img src="../images/author.jpg" alt="">
+            </li>
+        </ul>
+        <!--滚动加载的图标-->
+        <div class="pullUp">
+            <img style="display: none;" src="../images/loading.gif" alt=""> <span>滚动加载</span>
+        </div>
+    </div>
+</div>
+<div class="footer">底部的数据，讲师数据各种show</div>
+<script src="../assets/iscroll/iscroll-probe.js"></script>
+<script type="text/template" id="templateId">
+    {{each rows as value}}
+    <li>
+        <p>{{value.username}}</p>
+        <img src="{{value.lifePhoto}}" alt="">
+    </li>
+    {{/each}}
+</script>
+<script>
+      /*初始化下拉滚动条*/
+      var iscroll=new IScroll(".wrapper",{
+           scrollbars:true,
+           probeType:2
+      });
+
+      /*
+      * 我要去做的是判断用户的是否是下拉刷新，如果是下拉刷新，下拉，然后去加载对应的数据
+      * 如果是滚动加载，加载对应的数据.
+      * 没有提供具体的下拉刷新以及滚动加载的函数给我们.
+      * */
+
+     //iscroll 里面也有事件  scrollStart scroll 滚动的时候触发  scrollEnd 滚动结束的时候触发.
+
+      //判断用户是下拉刷新还是滚动加载. 下拉实际上是在y 轴上面进行一个移动.
+
+      var down;
+      var up=false;
+      iscroll.on("scroll",function(){
+               var distince=this.y;
+               if(distince>60){
+                     down=true;
+                     document.querySelector(".pullDown span").innerHTML="释放刷新";
+                     //document.querySelector(".pullDown img").style.display="";
+               }
+               //滚动加载..  这个判断相当来说要麻烦一些.
+               //我要获取内容的高度，我要获取窗口的高度，我要获取滚动的距离.
+               var  contentHeight=$(".content").height();
+               var winHeight=$(window).height();
+               if((winHeight+Math.abs(distince))-contentHeight>130){
+                     document.querySelector(".pullUp span").innerHTML="释放加载";
+                     up=true;
+               }
+      });
+
+      var params={
+           page:1,
+           pageSize:2
+      }
+
+      var render=function (){
+              $.ajax({
+                   url:"../api/queryTeacher.php",
+                   type:"get",
+                   data:params,
+                   dataType:"json",
+                   success:function(data){
+                       console.log(data);
+                       //解析数据。 解析数据我这边且用模板去进行解析,且用 最新的模板的语法去进行解析.
+                        var html=template("templateId",data);
+                        $(".content").append(html);
+
+                        //滚动条刷新的一个方法. refresh
+                   }
+              })
+
+      }
+
+
+      iscroll.on("scrollEnd",function(){
+
+                //在这里滚动结束之后，根据用户的行为进行具体的代码实现.
+                if(down){
+                      document.querySelector(".pullDown span").innerHTML="下拉刷新";
+                      down=false;
+                      params.page=1;
+                      render();
+                      //请求数据
+
+                }
+                if(up){
+                      up=false;
+                      document.querySelector(".pullUp span").innerHTML="滚动加载";
+                      //加载数据.
+                      params.page++;
+                      render();
+                }
+
+      });
+
+
+</script>
+<form action="" enctype="multipart/form-data"></form>
+</body>
+</html>

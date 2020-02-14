@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./js/three/three.js"></script>
+    <!--控制摄像机.-->
+    <script src="./js/three/OrbitControls.js"></script>
+    <style>
+          *{
+                margin: 0;
+                padding: 0;
+          }
+    </style>
+</head>
+<body>
+        <!--
+            1:需要有一个舞台
+            2:准备一个摄像机
+            3:舞台上面需要有演员
+            4:创建演员，演员准备各种各样动作
+            5:创建演员，实际就是一个立方体，可以对立方体进行包装.
+            6：使用canvas 对设想的结果进行一个展示.
+        -->
+    <script>
+           var width=window.innerWidth;
+           var height=window.innerHeight;
+
+           //创建一个舞台.
+           var scene = new THREE.Scene();
+
+           //准备摄像机.
+           var camera=new THREE.PerspectiveCamera(50,width/height,0.1,800);
+
+           //控制摄像机的位置
+           camera.position.x=0;
+           camera.position.y=0;
+           //css3 的概念，近大远小.
+           camera.position.z=20;
+
+           //对准舞台.
+           camera.lookAt(scene.position);
+
+           //开始录制的时候使用canvas 标签对结果进行展示,我们要创建渲染器.
+           var renderer=new THREE.WebGLRenderer();
+           renderer.setSize(width-100,height-100);
+
+           document.body.appendChild(renderer.domElement);
+
+           //控制相机.
+           var orbitControl=new THREE.OrbitControls(camera);
+           //控制旋转.
+           orbitControl.autoRotate=true;
+
+
+
+           //准备演员. 几何体，立方体.
+           var box = new THREE.BoxGeometry(4,4,4);
+
+           //给这个演员立方体修饰一下，化妆.
+           var materials=[
+                 new THREE.MeshBasicMaterial({"color":"pink"}),
+                 new THREE.MeshBasicMaterial({"color":"green"}),
+                 new THREE.MeshBasicMaterial({"color":"yellow"}),
+                 new THREE.MeshBasicMaterial({"color":"yellowgreen"}),
+                 new THREE.MeshBasicMaterial({"color":"blue"}),
+                 new THREE.MeshBasicMaterial({"color":"red"})
+           ];
+          //将box 立方体使用materials 颜色去进行修饰.
+           var cube=new THREE.Mesh(box,materials);
+
+           //我要把演员放在舞台上面去.
+           scene.add(cube);
+
+           //cube 是属于立方体，属于演员,改它的位置.
+          /* cube.rotation.x=0.4;
+           cube.rotation.y=0.7;
+           cube.rotation.z=0.6;
+
+           //渲染舞台的内容到摄像机.
+           renderer.render(scene,camera);*/
+
+           //可以对这个立体盒子鼠标的拖动改变方向.
+           //滑动滚动对这个立体盒子进行缩放.
+           //通过一个插件去控制摄像机
+
+           //希望有一个动画效果.
+           render();
+           function render() {
+               cube.rotation.x+=0.01;
+               cube.rotation.y+=0.01;
+               cube.rotation.z+=0.01;
+               renderer.render(scene,camera);
+               //回调函数通常是每秒执行60次.
+               requestAnimationFrame(render);
+           }
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+</body>
+</html>

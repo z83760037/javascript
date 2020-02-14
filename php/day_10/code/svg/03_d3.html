@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--绘制图标.-->
+    <script src="js/d3.js"></script>
+</head>
+<body>
+
+<script>
+        var data=[1,2,3,4];
+
+         //将数据填充到svg 里面来.
+         d3.select("body").append("svg").attr("width",300).attr("height",300)
+                 .selectAll("svg")
+                 //设置数据
+                 .data(data)
+                 //进行数据填充
+                 .enter()
+                 //填充到具体的那个子标签. rect circle
+                 .append("rect");
+
+
+
+</script>
+
+</body>
+</html>
